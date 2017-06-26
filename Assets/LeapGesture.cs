@@ -3,57 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LeapGesture {
-    List<Posicao> gestoLeap;
-    private Posicao captura;
-
+    List<LeapHand> gestoLeap;
+    int size;
 	public LeapGesture () {
-        gestoLeap = new List<Posicao>();
-        captura = new Posicao();
+        gestoLeap = new List<LeapHand>();
+        gestoLeap.Add(new LeapHand());
+        size = 0;
     }
-    public List<Posicao> get_gesto() {
+    public List<LeapHand> get_gesto() {
         return gestoLeap;
     }
 
-    public void capturarLeap(){
-        if (!Input.GetKeyDown(KeyCode.Return)){
-            captura.capturar();
-        }
-        else if(Input.GetKeyDown(KeyCode.Return)){
-            if (is_empty()) { 
-                this.Add(captura);
-            }
-            else if (!get_last().compara(captura) && !captura.empty()){
-                this.Add(captura);
-            }
-            captura.Clear();
-        }
-    }
-    public bool is_finalizated(){
-        int tamanho = gestoLeap.Count;
-        if(tamanho == 1){
-            return false;
-        }
-        return gestoLeap[tamanho].ended();
-    }
-    public bool is_rename() {
-        int tamanho = gestoLeap.Count;
-        if (tamanho == 0)
+    public void capturarLeap()
+    {
+        if (!Input.GetKeyDown(KeyCode.Return))
         {
+            gestoLeap[size].posicao = string.Concat(gestoLeap[size].posicao);
+        }
+        else if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if (!is_ended())
+            {
+                size++;
+                gestoLeap.Add(new LeapHand());
+            }
+        }
+    }
+    public bool is_ended(){
+        if(size == 0){
             return false;
         }
-        return gestoLeap[tamanho].rename();
+        return gestoLeap[size].posicao=="e";
     }
+
     public bool is_empty() {
-        return gestoLeap.Count == 1;
+        return gestoLeap.Count == 0;
     }
-
-
-    private Posicao get_last(){
-
-        return gestoLeap[gestoLeap.Count - 1];
-    }
-    private void Add(Posicao p) {
-        gestoLeap.Add(new Posicao());
-        this.get_last().set_posicao(p);
+    public void clear()
+    {
+        gestoLeap.Clear();
+        gestoLeap.Add(new LeapHand());
+        size = 0;
     }
 }

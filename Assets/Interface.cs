@@ -5,39 +5,62 @@ using UnityEngine;
 public class Interface : MonoBehaviour {
 
     Dicionario dicionario;
+    string estado;
+    Gesto Gcaptura;
+    Acao Acaptura;
 	// Use this for initialization
 	void Start () {
         dicionario = new Dicionario();
+        Gcaptura = new Gesto();
+        Acaptura = new Acao();
+        estado = "neutro";
 	}
 	
 	// Update is called once per frame
 	void Update () {
-           
-	}
+        if (estado == "neutro") {
+            if (Input.GetKeyDown(KeyCode.F1)) //Cadastrar novo gesto e nova acão
+            {
+                estado = "cadastrandoGesto";
+            }
+            else if (Input.GetKeyDown(KeyCode.F2)) //Consultar
+            {
+                estado = "capturandoGesto";
+            }
+        }
+        if(estado == "capturandoGesto")
+        {
+            Gcaptura.capturar();
+            if (Gcaptura.ended())
+            {
+               (dicionario.consultar(Gcaptura)).realizar();
+                Acaptura.clear();
+                Gcaptura.clear();
+                estado = "neutro";
+            }
+        }
+        if (estado == "cadastrandoGesto")
+        {
+            Gcaptura.capturar();
+            if (Gcaptura.ended())
+            {
+                estado = "capturarAcao";
+            }
+        }
+        if (estado == "capturarAcao")
+        {
+            Acaptura.capturar();
+            if (Acaptura.ended())
+            {
+                dicionario.cadastrar(Gcaptura, Acaptura);
+                Gcaptura.clear();
+                Acaptura.clear();
+                estado = "neutro";
+            }
+        }
 
-    void cadastro(Gesto gestos){
-        
-    }
 
-    void renomear(Gesto seq,Acao ato){
-        //string temp="";
-        //Debug.Log(string.Concat("Esse gestos fazem a acao: ", ato.get_acao()));
-        //Debug.Log("Deseja trocar a acao? (Y/N)");
-        //if (Input.GetKeyDown(KeyCode.Y))
-        //{
-        //    Debug.Log("Escreva a acao e aperte enter ao terminar");
-        //    while (!Input.GetKeyDown(KeyCode.KeypadEnter))
-        //    {
-        //        string.Concat(temp, Input.inputString);
-        //    }
-        //    ato.set_acao(temp);
-        //    dicionario.Rename(gestos, ato);
-        //    Debug.Log("Pronto");
-        //}
-        //else
-        //{
-        //    Debug.Log("Entao... falou");
-        //}
+
     }
 }
 
