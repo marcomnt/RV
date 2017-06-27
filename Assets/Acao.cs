@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using WindowsInput;
 
 public class Acao {
 
@@ -14,13 +13,19 @@ public class Acao {
     public void realizar(){
         Debug.Log(string.Concat("acao acionada! - " , this.acao));
     }
-    public void capturar() {
-  
-    }
+
     public void clear(){
         acao = "";
     }
     private string concat(string a){
         return string.Concat(acao, a);
+    }
+    public bool capturar()
+    {
+        return true;
+    }
+    public bool ended()
+    {
+        return true;
     }
 }

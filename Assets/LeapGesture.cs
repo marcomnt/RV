@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LeapGesture {
-    List<LeapHand> gestoLeap;
+    List<LeapHand_B> gestoLeap;
     int size;
 	public LeapGesture () {
-        gestoLeap = new List<LeapHand>();
-        gestoLeap.Add(new LeapHand());
+        gestoLeap = new List<LeapHand_B>();
+        gestoLeap.Add(new LeapHand_B());
         size = 0;
     }
-    public List<LeapHand> get_gesto() {
+    public List<LeapHand_B> get_gesto() {
         return gestoLeap;
     }
 
@@ -25,7 +25,7 @@ public class LeapGesture {
             if (!is_ended())
             {
                 size++;
-                gestoLeap.Add(new LeapHand());
+                gestoLeap.Add(new LeapHand_B());
             }
         }
     }
@@ -42,7 +42,7 @@ public class LeapGesture {
     public void clear()
     {
         gestoLeap.Clear();
-        gestoLeap.Add(new LeapHand());
+        gestoLeap.Add(new LeapHand_B());
         size = 0;
     }
 }
