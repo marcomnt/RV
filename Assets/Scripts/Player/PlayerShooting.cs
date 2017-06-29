@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnitySampleAssets.CrossPlatformInput;
 
 namespace CompleteProject
@@ -43,7 +44,7 @@ namespace CompleteProject
 
 #if !MOBILE_INPUT
             // If the Fire1 button is being press and it's time to fire...
-			if(Input.GetButton ("Fire1") && timer >= timeBetweenBullets && Time.timeScale != 0)
+			if(Input.GetButton ("Fire1"))
             {
                 // ... shoot the gun.
                 Shoot ();
@@ -74,51 +75,54 @@ namespace CompleteProject
         }
 
 
-        void Shoot ()
+        public void Shoot()
         {
-            // Reset the timer.
-            timer = 0f;
-
-            // Play the gun shot audioclip.
-            gunAudio.Play ();
-
-            // Enable the lights.
-            gunLight.enabled = true;
-			faceLight.enabled = true;
-
-            // Stop the particles from playing if they were, then start the particles.
-            gunParticles.Stop ();
-            gunParticles.Play ();
-
-            // Enable the line renderer and set it's first position to be the end of the gun.
-            gunLine.enabled = true;
-            gunLine.SetPosition (0, transform.position);
-
-            // Set the shootRay so that it starts at the end of the gun and points forward from the barrel.
-            shootRay.origin = transform.position;
-            shootRay.direction = transform.forward;
-
-            // Perform the raycast against gameobjects on the shootable layer and if it hits something...
-            if(Physics.Raycast (shootRay, out shootHit, range, shootableMask))
+            if (timer >= timeBetweenBullets && Time.timeScale != 0)
             {
-                // Try and find an EnemyHealth script on the gameobject hit.
-                EnemyHealth enemyHealth = shootHit.collider.GetComponent <EnemyHealth> ();
+                // Reset the timer.
+                timer = 0f;
 
-                // If the EnemyHealth component exist...
-                if(enemyHealth != null)
+                // Play the gun shot audioclip.
+                gunAudio.Play();
+
+                // Enable the lights.
+                gunLight.enabled = true;
+                faceLight.enabled = true;
+
+                // Stop the particles from playing if they were, then start the particles.
+                gunParticles.Stop();
+                gunParticles.Play();
+
+                // Enable the line renderer and set it's first position to be the end of the gun.
+                gunLine.enabled = true;
+                gunLine.SetPosition(0, transform.position);
+
+                // Set the shootRay so that it starts at the end of the gun and points forward from the barrel.
+                shootRay.origin = transform.position;
+                shootRay.direction = transform.forward;
+
+                // Perform the raycast against gameobjects on the shootable layer and if it hits something...
+                if (Physics.Raycast(shootRay, out shootHit, range, shootableMask))
                 {
-                    // ... the enemy should take damage.
-                    enemyHealth.TakeDamage (damagePerShot, shootHit.point);
-                }
+                    // Try and find an EnemyHealth script on the gameobject hit.
+                    EnemyHealth enemyHealth = shootHit.collider.GetComponent<EnemyHealth>();
 
-                // Set the second position of the line renderer to the point the raycast hit.
-                gunLine.SetPosition (1, shootHit.point);
-            }
-            // If the raycast didn't hit anything on the shootable layer...
-            else
-            {
-                // ... set the second position of the line renderer to the fullest extent of the gun's range.
-                gunLine.SetPosition (1, shootRay.origin + shootRay.direction * range);
+                    // If the EnemyHealth component exist...
+                    if (enemyHealth != null)
+                    {
+                        // ... the enemy should take damage.
+                        enemyHealth.TakeDamage(damagePerShot, shootHit.point);
+                    }
+
+                    // Set the second position of the line renderer to the point the raycast hit.
+                    gunLine.SetPosition(1, shootHit.point);
+                }
+                // If the raycast didn't hit anything on the shootable layer...
+                else
+                {
+                    // ... set the second position of the line renderer to the fullest extent of the gun's range.
+                    gunLine.SetPosition(1, shootRay.origin + shootRay.direction * range);
+                }
             }
         }
     }

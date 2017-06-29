@@ -3,21 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using Leap.Unity;
 using System;
+using CompleteProject;
 
-public class GestureCatcher : MonoBehaviour {
+public class GestureCatcher : MonoBehaviour
+{
 
     LeapHand[] hands;
     HandComparison handComp;
+    CompleteProject.PlayerShooting playershooting;
+
+    //use this for: setar essa porra na tora!
+    //public void setaEssaPorra(PlayerShooting ps){
+    //    this.playershooting = ps;
+    //}
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         this.handComp = new HandComparison(1, 1);
         this.hands = new LeapHand[2];
-        //
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    private void Awake()
+    {
+        playershooting = GetComponentInChildren<CompleteProject.PlayerShooting>();
+        Debug.Log(this.playershooting);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         RigidHand[] handsCatcher = (RigidHand[])GameObject.FindObjectsOfType(typeof(RigidHand));
 
         foreach (RigidHand hand in handsCatcher)
@@ -27,13 +42,16 @@ public class GestureCatcher : MonoBehaviour {
             {
                 if (handComp.compareHand(this.hands[0], lHand))
                 {
-                    Console.WriteLine("DDDAAALLEEEEE");
+                    this.playershooting.Shoot();
+                    Debug.Log("DDDAAALLEEEEE");
                 }
-            } else
+            }
+            else
             {
                 if (handComp.compareHand(this.hands[1], lHand))
                 {
-                    Console.WriteLine("EEEEELLAAADDD");
+                    this.playershooting.Shoot();
+                    Debug.Log("EEEEELLAAADDD");
                 }
             }
         }
