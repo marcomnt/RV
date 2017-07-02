@@ -13,17 +13,23 @@ public class LeapHand
 
     public LeapHand(RigidHand hand)
     {
-        this.palm = new Guidance(hand.palm);
-        this.forearm = new Guidance(hand.forearm);
-        this.elbowJoint = new Guidance(hand.elbowJoint);
+        if(hand.palm != null)
+            this.palm = new Guidance(hand.palm);
+
+        if (hand.forearm != null)
+            this.forearm = new Guidance(hand.forearm);
+
+        if (hand.elbowJoint != null)
+            this.elbowJoint = new Guidance(hand.elbowJoint);
 
         FingerModel[] fingersModel = hand.fingers;
-        this.fingers = new Guidance[fingersModel.Length, FingerModel.NUM_JOINTS];
+        this.fingers = new Guidance[fingersModel.Length, FingerModel.NUM_BONES];
         for (int i = 0; i < fingersModel.Length; i++)
         {
-            for (int j = 0; j<=3; ++j)
+            for (int j = 0; j < FingerModel.NUM_BONES; ++j)
             {
-                this.fingers[i,j] = new Guidance(fingersModel[i].joints[j]);
+                if(fingersModel[i] != null && fingersModel[i].bones[j] != null)
+                    this.fingers[i,j] = new Guidance(fingersModel[i].bones[j]);
             }
         }
 

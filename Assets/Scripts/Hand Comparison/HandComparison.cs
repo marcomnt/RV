@@ -58,17 +58,17 @@ public class HandComparison
 
         if (this.handsVerify.Contains(current.handedness) && this.handsVerify.Contains(saved.handedness))
         {
-            if (this.forearmVerify)
+            if (this.forearmVerify && saved.forearm != null)
             {
                 result = result && compareGuidanceWithTHreshold(current.forearm, saved.forearm);
             }
 
-            if (this.palmVerify)
+            if (this.palmVerify && saved.palm != null)
             {
                 result = result && compareGuidanceWithTHreshold(current.palm, saved.palm);
             }
 
-            if (this.elbowJointVerify)
+            if (this.elbowJointVerify && saved.elbowJoint != null)
             {
                 result = result && compareGuidanceWithTHreshold(current.elbowJoint, saved.elbowJoint);
             }
@@ -76,11 +76,12 @@ public class HandComparison
             // fingersVerify length can launch exception
             for (int i = 0; i < fingersVerify.Length; i++)
             {
-                for (int j=0; j<=3; ++j)
+                if (fingersVerify[i])
                 {
-                    if (fingersVerify[i])
+                    for (int j=0; j<=3; ++j)
                     {
-                        result = result && compareGuidanceWithTHreshold(current.fingers[i, j], saved.fingers[i, j]);
+                        if(saved.fingers[i, j] != null)
+                            result = result && compareGuidanceWithTHreshold(current.fingers[i, j], saved.fingers[i, j]);
                     }
                 }
             }
